@@ -1,0 +1,289 @@
+---
+title: "Statistics and Data Analysis Using R Programming"
+author: "Isaac Ajao"
+date: "2025-03-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### **1. Introduction to R for Statistics and Data Analysis**  
+- Overview of R and its importance in statistics & data analysis  
+- Installing R and RStudio  
+- Basic R syntax (variables, data types, functions)  
+- Loading essential libraries (`tidyverse`, `ggplot2`, `dplyr`)  
+
+### **2. Core Statistical Techniques Using R**  
+- **Descriptive Statistics**: Mean, median, mode, variance, standard deviation (`summary()`, `sd()`, `IQR()`)  
+- **Data Visualization**: Histogram, boxplot, scatterplot (`ggplot2`)  
+- **Hypothesis Testing**: t-tests, ANOVA (`t.test()`, `aov()`)  
+- **Regression Analysis**: Simple & multiple linear regression (`lm()`, `summary()`)  
+
+### **3. Data Analysis Workflow**  
+- **Importing Data**: CSV, Excel, database connections (`read.csv()`, `readxl`)  
+- **Data Cleaning**: Handling missing values (`na.omit()`, `tidyverse` functions)  
+- **Data Transformation**: Filtering, selecting, mutating columns (`dplyr::filter()`, `mutate()`)  
+- **Exploratory Data Analysis (EDA)**: Summarizing and visualizing key patterns  
+
+### **4. Real-World Use Case: Data-Driven Decision Making**  
+- Present a case study (e.g., analyzing customer satisfaction, sales trends, environmental data)  
+- Walk through the full process: data import → cleaning → analysis → visualization → interpretation  
+- Discussion on insights and how to communicate findings effectively  
+
+---
+
+### **1. Introduction to R for Statistics and Data Analysis**  
+
+#### **R Script**: Basic operations  
+```{r}
+# Install and load essential libraries
+# install.packages("tidyverse")
+library(tidyverse)
+
+# Basic operations
+x <- c(10, 20, 30, 40, 50)
+mean(x)  # Compute mean
+sd(x)    # Compute standard deviation
+summary(x)  # Get a statistical summary
+```
+
+#### **Exercise**:  
+1. Install R and RStudio.  
+2. Load the `tidyverse` package.  
+3. Create a numeric vector of any five values and compute the mean and standard deviation.  
+
+### **2. Core Statistical Techniques Using R**  
+
+#### **Students' Scores Dataset**  
+```{r}
+# Create Students' Scores Dataset
+students_scores <- data.frame(
+  Name = c("Ade", "Chuks", "Bayo", "Mary", "Afusat"),
+  Score = c(85, 78, 90, 70, 88),
+  Study_Hours = c(10, 8, 12, 6, 11)
+)
+
+print(students_scores)
+```
+
+#### **Exercise**:  
+1. Check for missing values
+1. Calculate mean, median, and standard deviation of scores.  
+2. Perform a t-test to check if the mean score is different from 75.  
+3. Plot a histogram of student scores.  
+4. Run a linear regression model to predict scores based on study hours. 
+
+
+#### **R Script**:  
+```{r}
+# Load the dataset
+students <- students_scores
+
+# Descriptive statistics
+summary(students)
+
+# Histogram of scores
+library(ggplot2)
+ggplot(students, aes(x = Score)) + geom_histogram(binwidth = 5, fill = "blue", color = "black")
+
+# Hypothesis test (t-test)
+t.test(students$Score, mu = 75)  # Checking if the average score is significantly different from 75
+
+# Linear regression: Study Hours vs Score
+model <- lm(Score ~ Study_Hours, data = students)
+summary(model)
+```
+
+
+### **Using large data from Csv/Excel file**
+
+#### **R Script**:  
+
+#### **Check for missing values and distribution**
+```{r}
+# Import the dataset
+students <- read.csv("students_scores_nigeria_1000.csv")
+
+# Check for missing values
+sum(is.na(students))
+
+# Check distribution of Scores using boxplot
+ggplot(students, aes(y = Score)) + geom_boxplot(fill="skyblue", color="black")
+
+# Pairwise correlation analysis
+cor(students[, c("Score", "Study_Hours")])
+```
+
+#### **Creating new variables**
+```{r}
+# Categorize students based on performance
+students <- students %>%
+  mutate(Performance_Category = case_when(
+    Score >= 85 ~ "Excellent",
+    Score >= 70 & Score < 85 ~ "Good",
+    TRUE ~ "Needs Improvement"
+  ))
+
+# View the first few rows
+head(students)
+
+```
+
+
+```{r}
+# Descriptive statistics
+summary(students)
+
+# Histogram of scores
+library(ggplot2)
+ggplot(students, aes(x = Score)) + geom_histogram(binwidth = 5, fill = "blue", color = "black")
+
+# Hypothesis test (t-test)
+t.test(students$Score, mu = 75)  # Checking if the average score is significantly different from 75
+
+# Linear regression: Study Hours vs Score
+model <- lm(Score ~ Study_Hours, data = students)
+summary(model)
+```
+
+### **3. Data Analysis Workflow**  
+
+#### **Sales Data Dataset**  
+```{r}
+# Create Sales Data Dataset
+sales_data <- data.frame(
+  Date = as.character(seq(as.Date("2024-01-01"), by = "day", length.out = 5)),
+  Sales = c(500, 700, 800, 400, 650),
+  Category = c("Electronics", "Clothing", "Electronics", "Clothing", "Electronics")
+)
+
+print(sales_data)
+```  
+
+#### **Exercise**:  
+1. Import `sales_data.csv` into R.  
+2. Convert the Date column to the correct format.  
+3. Filter only Electronics sales and compute the total revenue.  
+4. Create a time series line plot showing sales trends by category.
+
+#### **R Script**: 
+#### **ANOVA test to compare sales across multiple categories**
+```{r}
+# ANOVA to compare sales among different product categories
+anova_model <- aov(Sales ~ Category, data = sales_data)
+summary(anova_model)
+
+```
+
+
+```{r}
+# Load dataset
+sales <- read.csv("sales_data.csv")
+
+# Convert Date column to Date format
+sales$Date <- as.Date(sales$Date, format="%Y-%m-%d")
+
+summary(sales) # Summary statistics
+
+# Filter sales for Electronics only
+library(dplyr)
+electronics_sales <- filter(sales, Category == "Electronics")
+
+# Aggregate total sales by category
+total_sales <- sales %>% group_by(Category) %>% 
+summarise(Total = sum(Sales))
+print(total_sales)
+
+# Plot time series sales trend
+ggplot(sales, aes(x = Date, y = Sales, color = Category)) + geom_line() + geom_point()
+```
+
+### **Using large data from Csv/Excel file**
+
+#### **R Script**: 
+
+```{r}
+# Import dataset
+sales <- read.csv("sales_data_1000.csv")
+
+# Convert Date column to Date format
+sales$Date <- as.Date(sales$Date, format="%Y-%m-%d")
+
+summary(sales) # Summary statistics
+
+# Filter sales for Electronics only
+library(dplyr)
+electronics_sales <- filter(sales, Category == "Electronics")
+
+# Aggregate total sales by category
+total_sales <- sales %>% group_by(Category) %>% 
+summarise(Total = sum(Sales))
+print(total_sales)
+
+# Plot time series sales trend
+ggplot(sales, aes(x = Date, y = Sales, color = Category)) + geom_line() + geom_point()
+```
+
+
+
+### **4. Real-World Use Case: Data-Driven Decision Making**  
+
+#### **Employee Performance Dataset**  
+```{r}
+# Create Employee Performance Dataset
+employee_performance <- data.frame(
+  Employee = c("A", "B", "C", "D", "E"),
+  Work_Hours = c(35, 40, 45, 50, 38),
+  Performance_Score = c(78, 85, 90, 92, 80)
+)
+
+print(employee_performance)
+```
+
+#### **Exercise**:  
+1. Load the `employee_performance.csv` dataset.  
+2. Create a scatter plot with a trendline showing the relationship between work hours and performance.  
+3. Run a linear regression to analyze how work hours impact performance.  
+4. Predict performance for an employee working 42 hours.  
+
+### **Using large data from Csv/Excel file**
+
+#### **R Script**:  
+```{r}
+# Load dataset
+performance <- read.csv("employee_performance.csv")
+
+# Scatter plot
+ggplot(performance, aes(x = Work_Hours, y = Performance_Score)) + geom_point() + geom_smooth(method="lm")
+
+# Linear regression model
+perf_model <- lm(Performance_Score ~ Work_Hours, data = performance)
+summary(perf_model)
+
+# Predict performance for a new employee working 42 hours
+new_data <- data.frame(Work_Hours = 42)
+predict(perf_model, new_data)
+```
+
+
+#### **R Script**:  
+```{r}
+# Load dataset
+performance <- read.csv("employee_performance_1000.csv")
+
+# Scatter plot
+ggplot(performance, aes(x = Work_Hours, y = Performance_Score)) + geom_point() + geom_smooth(method="lm")
+
+# Linear regression model
+perf_model <- lm(Performance_Score ~ Work_Hours, data = performance)
+summary(perf_model)
+
+# Predict performance for a new employee working 42 hours
+new_data <- data.frame(Work_Hours = 42)
+predict(perf_model, new_data)
+```
+```
+

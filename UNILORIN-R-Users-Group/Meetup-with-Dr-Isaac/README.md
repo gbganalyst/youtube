@@ -1,8 +1,6 @@
-# Understanding Quarto Documents: Types, Formatting, and Creation
+# Introduction to Statistics and Data Analysis Using R Programming
 
-<p align="right">
-  <img src="Yani.jpg" alt="Yani" height="100"/>
-</p>
+[<img src="Isaac.png" align="right" height="100" />](<https://youtu.be/qQlf4ySLpjQ>)
 
 Welcome to the **UNILORIN R Users Group Meetup** event repository. Here you will find:
 
@@ -10,6 +8,7 @@ Welcome to the **UNILORIN R Users Group Meetup** event repository. Here you will
 - Example code snippets  
 - Supplementary materials  
 
-All resources were shared by our speaker, [Yani](https://www.meetup.com/unilorin-r-users-group/events/307158068/). To learn how to navigate and apply these materials, please watch the tutorial video on YouTube:
+All resources were shared by our speaker, [Dr Isaac](https://www.meetup.com/unilorin-r-users-group/events/306314413/). To learn how to navigate and apply these materials, please watch the tutorial video on YouTube:
 
-**[Introduction to Quarto Documents](https://youtu.be/ZhPvfjtiqwM?si=PCT6C7iUmVc1_w6-)**
+**[Introduction to Quarto Documents](https://youtu.be/qQlf4ySLpjQ)**
+
