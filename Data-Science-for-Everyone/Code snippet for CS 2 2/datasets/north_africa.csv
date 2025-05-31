@@ -1,0 +1,8 @@
+Country,Region,Total Cases,Total Deaths,Total Recovered,Active Cases,Serious_Critical,Population,Total Tests,Tests/1M pop
+Algeria,North Africa,88252,2516,57146,88252,46,44188203,,
+Egypt,North Africa,118014,6750,103324,7940,46,103155589,1000000,9694
+Libya,North Africa,86580,1231,56702,28647,,6911249,458079,66280
+Morocco,North Africa,379657,6245,331301,42111,940,37097956,4074451,109830
+Sudan,North Africa,19196,1290,10942,6964,,44282906,,
+Tunisia,North Africa,104002,3561,76441,24000,298,11871659,485097,40862
+Western Sahara,North Africa,10,1,8,1,,603552,,
