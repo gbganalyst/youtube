@@ -29,6 +29,9 @@ The content is organised into three focused YouTube playlists. Work through them
 
 > **Tip:** Schedule regular coding sessions after each video. Even 20 minutes of practice reinforces what you just learned.
 
+
+You can donwload the code files and datasets used in the videos from the [GitHub repository](https://github.com/gbganalyst/youtube/tree/main/Data-Science-for-Everyone) or download them directly [here](https://bit.ly/ds4e-materials).  
+
 ---
 
 ## Learning Outcomes
