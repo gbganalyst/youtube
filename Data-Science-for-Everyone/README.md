@@ -21,16 +21,26 @@ Welcome to our curated learning path that blends clear explanations with hands-o
 
 The content is organised into three focused YouTube playlists. Work through them in order or dip into the one that meets your current need.
 
-| Module                                                              | What You’ll Learn                                                                                                          | Playlist                                                                                       |
-| ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| **1. Programming with Python: A Beginner’s Guide**                  | Python syntax, data types, functions, and best practices, plus mini tasks after each video to lock in learning.            | [Watch the playlist](https://www.youtube.com/playlist?list=PLjYLjYQsEVFHwwMoH-kY3rBqUAo4nmO_z) |
-| **2. Python for Data Analysis: A Practical Guide**                  | Pandas, NumPy, data cleaning, exploratory analysis, and real-life case studies that show you *why* each technique matters. | [Watch the playlist](https://www.youtube.com/playlist?list=PLjYLjYQsEVFHwwMoH-kY3rBqUAo4nmO_z) |
-| **3. Data Science Essentials: From Statistics to Machine Learning** | Core statistical concepts, feature engineering, model training, and evaluation—finished off with examples of deployment.   | [Watch the playlist](https://www.youtube.com/playlist?list=PLjYLjYQsEVFHwwMoH-kY3rBqUAo4nmO_z) |
+| Module| Title                                                              | What You’ll Learn                                                                                                          | Playlist                                                                                       | 
+| ------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 1  | **Programming with Python: A Beginner’s Guide**                  | Python syntax, data types, functions, and best practices, plus mini tasks after each video to lock in learning.            | [Watch the playlist](https://www.youtube.com/playlist?list=PLjYLjYQsEVFHwwMoH-kY3rBqUAo4nmO_z) | 
+| 2  | **Python for Data Analysis: A Practical Guide**                  | Pandas, NumPy, data cleaning, exploratory analysis, and real-life case studies that show you *why* each technique matters. | [Watch the playlist](https://www.youtube.com/playlist?list=PLjYLjYQsEVFHwwMoH-kY3rBqUAo4nmO_z) | 
+| 3  | **Data Science Essentials: From Statistics to Machine Learning** | Core statistical concepts, feature engineering, model training, and evaluation, finished off with examples of deployment.  | [Watch the playlist](https://www.youtube.com/playlist?list=PLjYLjYQsEVFHwwMoH-kY3rBqUAo4nmO_z) | 
 
 > **Tip:** Schedule regular coding sessions after each video. Even 20 minutes of practice reinforces what you just learned.
 
+---
 
-You can donwload the code files and datasets used in the videos from the [GitHub repository](https://github.com/gbganalyst/youtube/tree/main/Data-Science-for-Everyone) or download them directly [here](https://bit.ly/ds4e-materials).  
+## Downloadable Materials
+
+You can download the code files and datasets for all three modules at once [here](https://bit.ly/ds4e-materials), or you can download them individually:
+
+* **Module 1:** [Python Programming](https://bit.ly/ds4e-module1)
+
+* **Module 2:** [Data Analysis with Python](https://bit.ly/ds4e-module2)
+
+* **Module 3:** [Data Science Essentials](https://bit.ly/ds4e-module3)
+
 
 ---
 
