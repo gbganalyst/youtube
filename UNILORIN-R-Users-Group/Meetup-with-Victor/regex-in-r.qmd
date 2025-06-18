@@ -1,0 +1,430 @@
+---
+title: "Regular Expressions in R"
+author: "Victor Ordu"
+format: 
+  revealjs:
+    embed-resources: true
+    theme: sky
+    highlight-style: monokai 
+    slide-number: true
+    incremental: true
+    chalkboard: false
+    center: true
+execute:
+  echo: true
+  error: false
+---
+
+## Beginnings
+
+Check the following collection of words:
+
+```{r}
+#| label: collection
+#| output: asis
+#| echo: false
+
+collection <- function() {
+  el <- 
+  '<br>
+  
+<span style="color: blue; font-weight: bold;">begin  beige  beijing  beging  bring  boing  banger</span>
+  
+<br>'
+  
+  cat(el)
+}
+
+collection()
+```
+
+- It can be seen from this collection that there is a recurring pattern in the words. 
+
+---
+
+```{r}
+#| label: collections-2
+#| output: asis
+#| echo: false
+
+
+collection()
+```
+
+- In elementary math, such arrangements might lead to the following questions:
+  - **How many** words end in 'ing'?
+  - **Which** words end in 'ing'?
+  - Which words **do not** contain 'ing'?
+
+---
+
+- With regard to these quesions, the character sequence **i-n-g** is known as a regular expression (or **regex**).
+- With regular expressions, we _programmatically_ provide answers to these questions.
+
+
+## What is a Regular Expression?
+- A character pattern that is used to match text
+- Essentially, letters and symbols used to identify strings
+- Core regex syntax essentially the same across programming languages
+- Two types of characters used:
+  - Literals e.g. A to Z, 0 to 9
+  - Metacharacters e.g. ^, $, +, ?, etc
+  
+## Literal or "Regular" Characters
+Easy way to use regex
+
+`a` matches 'apple', 'bag', 'hat', 'dam'  
+
+`pp` also matches 'apple'  
+
+`cat` matches 'catch', 'locate', 'ducat', and of course, 'cat'  
+
+## Metacharacters
+Metacharacters are where the real power of regex resides. There are various types:
+
+1. Character matching
+2. Quantifiers
+3. Anchors
+4. Grouping
+5. Character classes
+6. Escapes
+
+## Character matching
+`.` (dot) matches ANY character  
+
+`\w` matches any alphanumeric character
+
+`\d` matches any digit (0 through 9)
+
+`\s` matches whitespace (including tabs, newlines, etc.)
+
+The negations of these are `\W`, `\D`, `\S`
+
+## Quantifiers
+- Used to indicate how many times a given character is matched
+- For example, "How many times does the letter 'q' occur?"
+
+---
+
+`*` means zero or more
+
+`?` means at least one time
+
+`+` means one or more times
+
+`{n}` means "exactly n times"
+
+`{n,}` means "n or more times"
+
+`{n,m}` means "between n and m times"
+
+
+## Anchors
+These characters are used to define the bounds of strings
+
+`^` indicates the start of a line
+
+`$` indicates the end of a line
+
+`\b` indicates the bounds of a "word"
+
+
+## Grouping
+These characters are used for grouping regex characters:
+
+`(...)` - any set of characters bounded by parentheses is taken as a unit
+
+## Character classes
+This is a useful construct for 
+
+`[xyz]` is taken as match on "any of x, y, or z"
+
+This would match "zoo", "xenon", "eyes"
+
+---
+
+Character classes also allow us to use ranges:
+
+`[1-3]` will match "156" and "562" but will not match "094"
+
+To match all the English lower case letters we can use `[a-z]`
+
+---
+
+We also have named character classes:
+
+`[:alnum:]` - any alphanumeric characater (same as `[A-Za-z0-9]`)
+
+`[:alpha:]` - any English letter (same as `[A-Za-z]`)
+
+`[:upper:]` - any upper case character (same as `[A-Z]`)
+
+`[:lower:]` - any lower case character (same as `[a-z]`)
+
+`[:digit:]` - 0 through 9 (same as `[0-9]`)
+
+... and more
+
+---
+
+## Escapes
+- In regex, we can escape characters with the backslash (`\`).
+- Escaping is particularly important when you want to match a character that also serves as a regex metacharacter.
+
+---
+
+- For instance:
+    - For the string "M.Sc." the regex `M.Sc.` might not yield the desired result.
+    - This is because `.` will match **any** character
+    - A better regex would be `M\.Sc\.`.
+    - The backslash ensure that we are exactly mathing the periods (`.`).
+- To match a backslash, double it i.e. `\\`. 
+  - In R's regex, **always** escape the backslash!
+
+## Lookaround (Advanced)
+This type of regex examines the neighbouring characters of a regex to decide on a match.
+
+**Positive Lookahead**  
+`X(?=Y)` - is match if X is followed by Y (where X or Y can be one or more characters)
+
+**Negative Lookahead**  
+`X(?!Y)` - is a match if X is not followed by Y
+
+**Positive Lookbehind** 
+`(?<=Y)X` - is a match if X is preceded by Y
+
+**Negative Lookbehind**  
+`(?<!Y)X` - is a match only if X is not preceded by Y
+
+## General Recap
+- `^abc$`    — exactly `"abc"`
+- `[0-9]{4}` — "contains four digits"
+- `\bword\b` — whole word "word"
+- Both `\w{5}` and `[:alnum:]{5}`
+  - will match "black"
+  - will not match "blue3"
+
+--- 
+
+**Quick Syntax Cheat Sheet**
+
+| | |
+|----------|--------------------------|
+| `.`      | any character            |
+| `*`      | 0 or more                |
+| `+`      | 1 or more                |
+| `?`      | 0 or 1                   |
+| `[]`     | character class          |
+| `()`     | capture group            |
+| `{n}`    | exactly n times          |
+| `{n,}`   | n or more times          |
+| `{n,m}`  | between n and m times    |
+| `|`      | OR                       |
+| `\b`     | word boundary            |
+| `\d`     | digit (shortcut)         |
+| `\s`     | whitespace (space, tab)  |
+
+
+## Why Regular Expressions?
+- Extract patterns from (messy) text
+- Clean and validate input
+- Useful for "Find and Replace" actions e.g. in IDEs
+- Example use cases:
+  - Extract phone numbers
+  - Clean up inconsistent names
+  - Validate email formats
+
+## Regular Expressions in R
+- R is the leading tool for **interactive** data analysis and data science.
+- Regex is also most useful when used interactively.
+- Regex + R is a powerful combination for data cleaning and tranformation.
+- Regex can be complicated and tedious. R's scripting capabilities makes data cleaning with regex reproducible and auditable.
+
+## Key Functions for using Regex in R
+
+- detection functions: `grep()` and `grepl()`
+
+- substitution functions: `sub()` and `gsub()`
+
+- location functions: `regexpr()` and `regexec()`
+
+## Detection - `grep`, `grepl`
+
+```{r}
+#| label: grep-signature
+#| echo: false
+
+args(grep)
+```
+
+Main arguments:
+
+|               |                                                  |
+|---------------|--------------------------------------------------|
+| `pattern`     | the regular expression                           |
+| `x`           | the vector against which the regex is matched    |
+| `ignore.case` | control case sensitivity                         |
+| `value`       | whether to return the index or the actual string |
+
+--- 
+
+```{r}
+#| label: grep-string
+
+x <- c("begin",  "beige",  "beijing",  "beging",  "bring",  "boing",  "banger")
+rgx <- "^bo"
+```
+
+<br>
+
+```{r}
+#| label: grep
+
+grep(rgx, x)
+grep(rgx, x, value = TRUE)
+grepl(rgx, x)
+```
+
+## Substitution - `sub()`, `gsub()`
+
+```{r}
+sub("ing$", "ings", x)
+sub("e", "o", "treated")
+gsub("e", "o", "treated")
+```
+
+---
+
+**Backreferences**  
+
+- These are used to refer to capture groups within a regular expression
+- Exremely useful when replacing substrings
+
+---
+
+```{r}
+#| label: backrefs
+
+str <- "Pop goes    weasel"
+
+sub("(^P.+es)(\\s+)(weasel)", "\\1 the \\3!", str)
+```
+
+
+
+## Location - `regexpr()`, `regexec()`
+- Unlike the `grep` and `sub` like functions, these give the actual positions within a string where the matches are made.
+- This can be useful when you want to create substrings based on a pattern.
+
+---
+
+
+```{r}
+#| label: regexprs
+
+x <- "https://r-project.org"
+pat <- "project"
+
+
+substr(x, 11, 17)
+substr(x, regexpr("//", x) + 4, regexpr("\\.", x) - 1)
+```
+
+
+## Regular Expression in R using the `stringr` package
+The `{stringr}` package comes with several functions for regular expressions similar to those from Base R. 
+
+If not installed, do so with `install.packages("stringr")`.
+
+To load the package into your R session:
+
+```{r}
+#| label: load-stringr
+
+
+library(stringr)
+```
+
+---
+
+## Some Comparisons to Base R
+
+|                   |                                        |
+|-------------------|----------------------------------------|
+| `str_which`       | `grep`                                 |
+| `str_detect`      | `grepl`                                |
+| `str_subset`      | `grep`, where `value` is set to `TRUE` |
+| `str_replace`     | `sub`                                  |
+| `str_replace_all` | `gsub`                                 |
+| `str_locate`      | `regexpr`                              |
+| `str_locate_all`  | `gregexpr`                             |
+
+For more, see `vignette("from-base", "stringr")`.
+
+
+## Differences between Base R and `{stringr}`
+Unlike Base R, `{stringr}` supports lookaround regex
+
+```{r}
+#| label: base-r-lookaround
+#| error: true
+
+grepl("foo(?=bar)", "foobaz")
+str_detect("foobaz", "foo(?!bar)")
+```
+
+---
+
+- `{stringr}` functions are particularly well designed for piping
+- This is because the first argument is always the input vector
+- In Base R functions like `grep` and `sub`, the input vector is the 2nd or 3rd argument, so piping is more complicated.
+
+---
+
+```{r}
+#| label: stringr-pipe
+
+s <- c("ebony", "Keduna", "Lagoss", "bauchi", "Rivers")
+
+s |> 
+  str_replace("^Ke", "Ka") |> 
+  str_replace("(Lagos)(s)", "\\1") |> 
+  str_replace("(y)$", "\\1i") |>
+  str_to_title()
+```
+
+The `{stringr}` variants also come with helper functions `regex()`, `fixed()`, `coll()`, and `boundary()` for finer control e.g.
+
+```{r}
+#| label: stringr-helper-function
+
+app <- c("Apple", "apple")
+str_detect(app, "ap")
+str_detect(app, regex("ap", ignore_case = TRUE))
+```
+
+## Practical Use Cases
+- Extract domain names from emails
+- Validate Nigerian phone numbers
+- Parse Twitter handles
+- Clean survey text responses
+- Extract hashtags from posts
+
+## Live Demo 
+- Load a messy dataset
+- Clean and extract
+
+## Common Pitfalls
+- Escaping backslashes: use `\` in strings
+- Complex regexes become unreadable — break them up if possible
+
+## Tools & Resources
+- [regex101.com](https://regex101.com/)
+- [stringr documentation](https://stringr.tidyverse.org/)
+- [RStudio Regex Cheat Sheet](https://rstudio.github.io/cheatsheets/regex.pdf)
+
+## Q & A
+_Ask me anything!_
+
+## Thank You!
+- Slides and code: <https://github.com/BroVic/ilorin-user-group-talk>
