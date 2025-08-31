@@ -4,7 +4,7 @@
 
 Welcome to the **UNILORIN R Users Group Meetup** event repository. Here you will find:
 
-- [Presentation slides](https://rpubs.com/akowundu/regex-in-r)  
+- [Presentation slides](https://gbganalyst.github.io/youtube/UNILORIN-R-Users-Group/Meetup-with-Babatunde/mastering-dplyr.html)  
 - Example code snippets  
 - Supplementary materials  
 
