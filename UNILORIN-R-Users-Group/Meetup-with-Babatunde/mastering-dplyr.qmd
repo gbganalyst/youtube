@@ -1,0 +1,777 @@
+---
+title: "Wrangle, Transform, Analyse"
+subtitle: "Your Path to Mastering dplyr in R"
+author: "Babatunde Adebayo"
+date: "30 August 2025"
+format: 
+  revealjs:
+    theme: dark
+    slide-number: true
+    chalkboard: true
+    incremental: true
+    code-fold: show
+    code-overflow: wrap
+    code-line-numbers: false
+    code-tools: true
+    logo: https://secure.meetupstatic.com/photos/event/2/8/e/c/clean_527410476.webp
+    highlight-style: monokai
+    transition: slide
+    background-transition: fade
+    code-copy: true
+    code-block-background: true
+    code-block-border-left: "#31BAE9"
+    fontsize: 1.5em
+    scrollable: true
+execute:
+  echo: true
+  eval: true
+  warning: false
+  message: false
+  cache: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Welcome to dplyr Mastery
+
+------------------------------------------------------------------------
+
+## About Your Speaker {.smaller}
+
+![](baba.png){.absolute top="50" right="50" width="200"}
+
+**Babatunde Adebayo**\
+*Data Scientist & Analytics Leader*
+
+-   7+ years in Business Intelligence, Data Engineering & ML
+-   Analytics Lead at OmniRetail (Fintech & Retail)
+-   Building predictive models, ETL pipelines, dashboards
+-   Active data science community instructor & mentor
+
+**Connect:** [LinkedIn](https://www.linkedin.com/in/adebayo-babatunde/)
+\| [GitHub](https://github.com/bteinstein)
+
+------------------------------------------------------------------------
+
+# What is dplyr?
+
+------------------------------------------------------------------------
+
+## dplyr: Grammar of Data Manipulation
+
+![](https://dplyr.tidyverse.org/logo.png){fig-align="center" width="87"}
+
+Core package in the **Tidyverse** ecosystem
+
+. . .
+
+**Why dplyr wins:**
+
+-   **Readable:** Verbs are intuitive (`filter`, `select`)
+
+-   **Consistent:** Works seamlessly with other Tidyverse packages
+
+-   **Efficient:** Often faster than base R equivalents
+
+------------------------------------------------------------------------
+
+## The Pipe Revolution
+
+**dplyr + pipe = readable code**
+
+```{r}
+#| eval: false
+# Traditional nested approach (hard to read)
+head(select(filter(car_data, year > 2015), title, year, price))
+
+# Pipe approach (reads like English)
+car_data |>
+  filter(year > 2015) |>
+  select(title, year, price) |>
+  head()
+```
+
+`x |> f(y)` becomes `f(x, y)`
+
+`%>%` magrittr pipe
+
+------------------------------------------------------------------------
+
+## Tidy Data Principles
+
+**dplyr expects tidy data:**
+
+-   Each **observation** (case) is in its own row
+-   Each **variable** is in its own column
+-   Each **value** has its own cell
+
+Perfect structure for data manipulation!
+
+------------------------------------------------------------------------
+
+# Today's Mission
+
+------------------------------------------------------------------------
+
+## Our Dataset: Nigerian Car Market
+
+**Goal:** Master essential dplyr verbs with real data
+
+**Dataset:** Nigerian Used Car Marketplace\
+[(Kaggle
+Source)](https://www.kaggle.com/datasets/sootersaalu/nigerian-used-car-marketplace/data)
+
+. . .
+
+**Contains 1,400 listings:** - Make, model, year, mileage - Price,
+location, import status\
+- Engine type, transmission
+
+------------------------------------------------------------------------
+
+## Setup: Loading Our Tools
+
+```{r setup}
+#| message: false
+#| warning: false
+# Load the tidyverse
+library(tidyverse)
+
+# Load our dataset
+car_data <- read_csv("./data/car_price.csv", show_col_types = FALSE)
+
+# Quick overview
+glimpse(car_data)
+```
+
+------------------------------------------------------------------------
+
+# dplyr's Grammar Framework
+
+------------------------------------------------------------------------
+
+## The Four Verb Categories
+
+dplyr organizes operations by what they target:
+
+. . .
+
+1.  **Rows:** Change observations\
+    `filter()`, `arrange()`, `slice()`
+
+. . .
+
+2.  **Columns:** Change variables\
+    `select()`, `mutate()`, `rename()`
+
+. . .
+
+3.  **Groups:** Operate on groups\
+    `group_by()`, `summarise()`
+
+. . .
+
+4.  **Tables:** Combine datasets\
+    `*_join()` functions
+
+------------------------------------------------------------------------
+
+# Working with Rows
+
+------------------------------------------------------------------------
+
+## Row Operations Overview
+
+**Core functions for row manipulation:**
+
+-   **`filter()`** - Keep rows matching conditions
+-   **`arrange()`** - Reorder rows by column values
+-   **`slice()`** - Choose rows by position
+-   **`distinct()`** - Remove duplicate rows
+
+------------------------------------------------------------------------
+
+## `filter()`: Your Data Bouncer
+
+**Syntax:** `filter(.data, condition1, condition2, ...)`
+
+. . .
+
+**Essential operators:**
+
+| Symbol  | Meaning      | Symbol    | Meaning   |
+|---------|--------------|-----------|-----------|
+| `==`    | equals       | `!=`      | not equal |
+| `>` `<` | greater/less | `>=` `<=` | ≥ / ≤     |
+| `%in%`  | in list      | `is.na()` | missing   |
+| `!`     | NOT          | `&` `|`   | AND / OR  |
+
+------------------------------------------------------------------------
+
+## `filter()` in Action
+
+```{r}
+# Find Lexus ES 350 cars in Abuja
+car_data |>
+  filter(title == "Lexus ES 350", 
+         location == "Abuja") |>
+  select(title, location, price, year)
+```
+
+------------------------------------------------------------------------
+
+## Practice Time: `filter()`
+
+**Challenge:** Find all *Foreign Used* cars from **2015**
+
+. . .
+
+```{r}
+#| code-fold: true
+car_data |>
+  filter(isimported == "Foreign Used", year == 2015) |>
+  select(title, year, isimported, price) |>
+  head()
+```
+
+------------------------------------------------------------------------
+
+## `arrange()`: Sorting Made Simple
+
+**Syntax:** `arrange(.data, column1, column2, ...)`
+
+-   Default: ascending order
+-   `desc(column)` for descending
+
+```{r}
+# Find the newest cars
+car_data |> 
+  arrange(desc(year)) |> 
+  select(title, year, price) |>
+  head(6)
+```
+
+------------------------------------------------------------------------
+
+## `slice()` and Position-Based Selection
+
+**Select rows by position:**
+
+```{r}
+# First 3 rows
+car_data |> slice_head(n = 3) |> select(title, price)
+
+# Random sample
+car_data |> slice_sample(n = 3) |> select(title, price)
+```
+
+------------------------------------------------------------------------
+
+## More Row Functions
+
+```{r}
+# Remove duplicates
+car_data |> 
+  distinct(title, year, .keep_all = TRUE) |>
+  nrow()
+
+# Original count
+nrow(car_data)
+```
+
+**Other useful functions:** - `slice_tail()` - last n rows -
+`slice_min()/slice_max()` - extreme values
+
+------------------------------------------------------------------------
+
+# Working with Columns
+
+------------------------------------------------------------------------
+
+## Column Operations Overview
+
+**Core functions for column manipulation:**
+
+-   **`select()`** - Pick specific columns
+-   **`mutate()`** - Create/modify columns\
+-   **`rename()`** - Change column names
+-   **`relocate()`** - Reorder columns
+
+------------------------------------------------------------------------
+
+## `select()`: Column Picker
+
+**Basic selection:**
+
+```{r}
+# Select specific columns
+car_data |> 
+  select(title, price, year) |>
+  head(4)
+```
+
+------------------------------------------------------------------------
+
+## `select()` Helper Functions
+
+**Powerful pattern matching:**
+
+```{r}
+# Pattern-based selection
+car_data |> 
+  select(title, ends_with("ion")) |> 
+  head(4)
+```
+
+**Available helpers:** - `starts_with("abc")`, `ends_with("xyz")` -
+`contains("pattern")`, `matches("regex")` - `where(is.numeric)`,
+`everything()`
+
+------------------------------------------------------------------------
+
+## Advanced `select()` Techniques
+
+```{r}
+# Select numeric columns only
+car_data |> 
+  select(title, where(is.numeric)) |> 
+  head(4)
+```
+
+. . .
+
+```{r}
+# Rename while selecting
+car_data |> 
+  select(car_model = title, kilometers = odometer, price) |> 
+  head(3)
+```
+
+------------------------------------------------------------------------
+
+## `rename()`: Keep All, Just Rename
+
+```{r}
+car_data |> 
+  rename(car_model = title, kilometers = odometer) |>
+  select(1:4) |>  # Show first 4 columns
+  head(3)
+```
+
+------------------------------------------------------------------------
+
+## `relocate()`: Column Reordering
+
+```{r}
+car_data |> 
+  relocate(price, year, .before = title) |>
+  select(1:6) |>  # Show repositioning
+  head(3)
+```
+
+------------------------------------------------------------------------
+
+# The Power of `mutate()`
+
+------------------------------------------------------------------------
+
+## `mutate()`: Creating New Variables
+
+**Syntax:** `mutate(.data, new_col = expression, ...)`
+
+```{r}
+car_data_clean <- car_data |> 
+  mutate(
+    car_age = 2025 - year,
+    price_million = price / 1000000,
+    high_mileage = ifelse(odometer > 100000, "High", "Normal")
+  )
+
+car_data_clean |> 
+  select(title, car_age, price_million, high_mileage) |> 
+  head(4)
+```
+
+------------------------------------------------------------------------
+
+## Advanced `mutate()` with `case_when()`
+
+```{r}
+car_data_enhanced <- car_data_clean |>
+  mutate(
+    age_category = case_when(
+      car_age <= 5 ~ "New",
+      car_age <= 10 ~ "Medium", 
+      TRUE ~ "Old"
+    ),
+    price_category = case_when(
+      price < 2000000 ~ "Budget",
+      price < 8000000 ~ "Mid-range", 
+      TRUE ~ "Luxury"
+    )
+  )
+
+car_data_enhanced |> 
+  select(title, age_category, price_category) |> 
+  head(6)
+```
+
+------------------------------------------------------------------------
+
+## `mutate()` Practice Challenge
+
+**Your turn:** Create a `price_million` column showing prices in
+millions of Naira
+
+. . .
+
+```{r}
+#| code-fold: true
+car_data |> 
+  mutate(price_million = price / 1000000) |> 
+  select(title, price, price_million) |>
+  head(4)
+```
+
+------------------------------------------------------------------------
+
+# Working with Groups
+
+------------------------------------------------------------------------
+
+## The Split-Apply-Combine Strategy
+
+**The most powerful dplyr pattern:**
+
+1.  **Split** data into groups (`group_by()`)
+2.  **Apply** functions to each group (`summarise()`)
+3.  **Combine** results automatically
+
+This is how you analyze categories!
+
+------------------------------------------------------------------------
+
+## `group_by()` + `summarise()`: The Dream Team
+
+```{r}
+# Extract car make and analyze by import status
+car_summary <- car_data |> 
+  mutate(make = word(title, 1)) |>  # stringr: extract first word as brand name
+  group_by(make, isimported) |> 
+  summarise(
+    count = n(),
+    avg_price_mil = mean(price / 1000000, na.rm = TRUE),
+    .groups = "drop"
+  ) |> 
+  arrange(desc(count))
+
+car_summary |> head(8)
+```
+
+------------------------------------------------------------------------
+
+## Essential Summary Functions
+
+**Common aggregation functions:**
+
+-   **Counts:** `n()`, `n_distinct()`
+-   **Central:** `mean()`, `median()`
+-   **Range:** `min()`, `max()`, `sd()`
+-   **Position:** `first()`, `last()`
+-   **Logic:** `sum(condition)`, `mean(condition)`
+
+------------------------------------------------------------------------
+
+## Multiple Grouping Variables
+
+```{r}
+car_data |>
+  mutate(
+    make = word(title, 1),  # stringr: extract first word as brand
+    age_group = ifelse(2025 - year <= 5, "New", "Older")  # categorize by age
+  ) |>
+  group_by(make, age_group) |>
+  summarise(
+    count = n(),
+    avg_price = mean(price, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  filter(count >= 3) |>  # Only meaningful samples
+  head(8)
+```
+
+------------------------------------------------------------------------
+
+## Window Functions with Groups
+
+```{r}
+car_data |>
+  mutate(make = word(title, 1)) |>
+  group_by(make) |>
+  mutate(
+    rank_in_make = row_number(desc(price)),
+    avg_make_price = mean(price, na.rm = TRUE)
+  ) |>
+  select(title, make, price, rank_in_make) |>
+  head(6)
+```
+
+------------------------------------------------------------------------
+
+## Group Practice Challenge
+
+**Challenge:** Find average car age by location. Which location has the
+newest cars?
+
+. . .
+
+```{r}
+#| code-fold: true
+car_data |>
+  mutate(car_age = 2025 - year) |>
+  group_by(location) |> 
+  summarise(
+    car_count = n(),
+    avg_age = mean(car_age, na.rm = TRUE),
+    .groups = "drop"
+  ) |> 
+  filter(car_count >= 5) |>  # Meaningful sample sizes
+  arrange(avg_age) |>
+  head(6)
+```
+
+------------------------------------------------------------------------
+
+# Real-World Analysis
+
+------------------------------------------------------------------------
+
+## Chaining Operations: The Full Pipeline
+
+```{r}
+optimal_strategy <- car_data |>
+  # Step 1: Filter out unrealistic prices and missing years
+  filter(price > 500000, price < 20000000, !is.na(year)) |>
+  
+  # Step 2: Create derived variables for analysis
+  mutate(
+    car_age = 2025 - year,
+    # Standardize major locations using stringr::str_detect()
+    clean_location = case_when(
+      str_detect(location, "Lagos") ~ "Lagos",      # stringr
+      str_detect(location, "Abuja") ~ "Abuja",      # stringr
+      str_detect(location, "Ogun") ~ "Ogun",        # stringr
+      TRUE ~ "Other"  # catch-all for other locations
+    )
+  ) |>
+  
+  # Step 3: Group by location and import status for comparison
+  group_by(clean_location, isimported) |>
+  
+  # Step 4: Calculate key metrics for car buying strategy
+  summarise(
+    count = n(),  # total cars available
+    avg_price_millions = mean(price / 1000000),  # average price in millions
+    avg_age = mean(car_age),  # average age in years
+    good_deals = sum(price < 5000000 & car_age < 10),  # affordable recent cars
+    .groups = "drop"  # remove grouping structure
+  )
+
+optimal_strategy
+```
+
+------------------------------------------------------------------------
+
+## Data Quality Assessment
+
+**Always check your data first:**
+
+```{r}
+car_data |> 
+  summarise(
+    total_rows = n(),
+    missing_price = sum(is.na(price)),
+    missing_year = sum(is.na(year)),
+    zero_prices = sum(price == 0, na.rm = TRUE),
+    unrealistic_years = sum(year > 2025 | year < 1990, na.rm = TRUE)
+  )
+```
+
+------------------------------------------------------------------------
+
+## Data Cleaning Pipeline
+
+```{r}
+clean_cars <- car_data |>
+  # Step 1: Remove rows with missing or unrealistic values
+  filter(
+    !is.na(price), !is.na(year),           # remove missing values
+    price > 100000, price < 100000000,     # reasonable price range in Naira
+    year >= 1990, year <= 2025             # realistic car years
+  ) |>
+  
+  # Step 2: Standardize text data using stringr functions
+  mutate(
+    location = str_to_title(str_trim(location)),  # stringr: title case + trim whitespace
+    title = str_to_title(title)                   # stringr: title case for consistency
+  ) |>
+  
+  # Step 3: Remove duplicate listings based on key identifying columns
+  distinct(title, year, price, location, .keep_all = TRUE)
+
+# Check how many clean rows remain
+clean_cars |> summarise(clean_rows = n())
+```
+
+------------------------------------------------------------------------
+
+# Key Insights from Analysis
+
+------------------------------------------------------------------------
+
+## Location Strategy Insights
+
+```{r}
+clean_cars |>
+  # Create standardized car age variable
+  mutate(
+    car_age = 2025 - year,
+    # Consolidate locations using pattern matching (stringr)
+    location_clean = case_when(
+      str_detect(location, "Lagos") ~ "Lagos",      # stringr: pattern detection
+      str_detect(location, "Abuja") ~ "Abuja",      # stringr
+      str_detect(location, "Ogun") ~ "Ogun",        # stringr
+      TRUE ~ "Other"  # group smaller locations
+    )
+  ) |>
+  
+  # Group by cleaned location names for comparison
+  group_by(location_clean) |>
+  
+  # Calculate market characteristics by location
+  summarise(
+    cars_available = n(),                          # inventory size
+    avg_price_millions = mean(price / 1000000),    # average price in millions
+    avg_age = mean(car_age),                       # fleet age
+    .groups = "drop"
+  ) |>
+  
+  # Order by market size (most inventory first)
+  arrange(desc(cars_available))
+```
+
+------------------------------------------------------------------------
+
+## Import vs Local Analysis
+
+```{r}
+clean_cars |>
+  # Create car age for analysis
+  mutate(car_age = 2025 - year) |>
+  
+  # Group by import status to compare local vs foreign cars
+  group_by(isimported) |>
+  
+  # Calculate key buying metrics for each import category
+  summarise(
+    count = n(),                                    # total available
+    avg_price_millions = mean(price / 1000000),     # average price in millions
+    median_age = median(car_age),                   # typical car age
+    affordable_options = sum(price < 5000000),      # cars under 5M Naira
+    .groups = "drop"
+  )
+```
+
+------------------------------------------------------------------------
+
+# Your dplyr Toolkit
+
+------------------------------------------------------------------------
+
+## Essential Functions Summary
+
+| **Category** | **Functions** | **Purpose** |
+|------------------------|------------------------|------------------------|
+| **Rows** | `filter()`, `arrange()`, `slice()` | Choose & order observations |
+| **Columns** | `select()`, `mutate()`, `rename()` | Choose & transform variables |
+| **Groups** | `group_by()`, `summarise()` | Aggregate by categories |
+
+**Remember:** Chain with the pipe `|>` for readable workflows!
+
+------------------------------------------------------------------------
+
+## The dplyr Mindset
+
+**Think in verbs:** 1. What observations do I need? → `filter()` 2. What
+variables do I need? → `select()` 3. What new variables? → `mutate()` 4.
+How should I group? → `group_by()` 5. What summaries? → `summarise()`
+
+------------------------------------------------------------------------
+
+# Practice Challenges
+
+------------------------------------------------------------------------
+
+## Try These Exercises
+
+1.  **Market Analysis:** Find the most popular car brands by location
+
+2.  **Value Assessment:** Identify cars with best price-to-age ratios
+
+3.  **Efficiency Study:** Compare automatic vs manual transmission costs
+
+4.  **Personal Filter:** Create your car shopping criteria function
+
+5.  **Trend Analysis:** Analyze price patterns by year and import status
+
+------------------------------------------------------------------------
+
+# Next Steps
+
+------------------------------------------------------------------------
+
+## Continue Your dplyr Journey
+
+**Immediate next steps:** - Practice with your own datasets - Master
+table joins (`left_join()`, `inner_join()`) - Explore `across()` for
+multiple column operations - Learn `nest()` and `unnest()` for advanced
+workflows
+
+**Resources:** - [R for Data Science](https://r4ds.hadley.nz) (free
+online) - [dplyr documentation](https://dplyr.tidyverse.org)
+
+------------------------------------------------------------------------
+
+# Questions & Discussion
+
+**Let's discuss:**
+
+-   Syntax questions?
+-   Data challenges you're facing?
+-   Analysis approaches?
+-   Your next learning goals?
+
+------------------------------------------------------------------------
+
+## Thank You!
+
+**Register for future sessions:**\
+[UniLorin R Users Group](https://www.meetup.com/unilorin-r-user-group/)
+
+:::::: columns
+::: {.column width="40%"}
+![](https://i0.wp.com/kwarastate.gov.ng/wp-content/uploads/unilorin-logo.jpeg?ssl=1){width="120"}
+:::
+
+::: {.column width="30%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/1280px-R_logo.svg.png){width="100"}
+:::
+
+::: {.column width="30%"}
+**Keep Learning!**\
+- Practice regularly\
+- Join our community\
+- Share your projects
+:::
+::::::
