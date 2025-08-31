@@ -1,6 +1,6 @@
-# Hands-On Data Cleaning in R with Regular Expressions
+# Wrangle, Transform, Analyse: Your Path to Mastering dplyr in R
 
-[<img src="victor.png" align="right" height="100" />](<https://youtu.be/N0DdbszMt2Y>)
+[<img src="babatunde.pngg" align="right" height="100" />](<https://youtu.be/N0DdbszMt2Y>)
 
 Welcome to the **UNILORIN R Users Group Meetup** event repository. Here you will find:
 
@@ -8,6 +8,6 @@ Welcome to the **UNILORIN R Users Group Meetup** event repository. Here you will
 - Example code snippets  
 - Supplementary materials  
 
-All resources were shared by our speaker, [Dr Victor](https://www.meetup.com/unilorin-r-users-group/events/307715659/). To learn how to navigate and apply these materials, please watch the tutorial video on YouTube:
+All resources were shared by our speaker, [Mr Babatunde](https://www.meetup.com/unilorin-r-users-group/events/307715659/). To learn how to navigate and apply these materials, please watch the tutorial video on YouTube:
 
-**[Hands-On Data Cleaning in R with Regular Expressions](https://youtu.be/N0DdbszMt2Y)**
+**[Mastering dplyr in R](https://youtu.be/N0DdbszMt2Y)**
